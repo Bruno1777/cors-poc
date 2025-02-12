@@ -1,7 +1,8 @@
-fetch("https://example1.post.ch/coveo/rest/token", {
+<script>fetch("https://example1.post.ch/coveo/rest/token", {
   method: "GET",
   credentials: "include"  // This sends cookies with the request
 })
   .then(response => response.text())
   .then(data => console.log(data))
   .catch(error => console.error("Error:", error));
+</script>
