@@ -1,6 +1,7 @@
 <script>
 fetch("https://mapi.makemytrip.com/ext/web/pwa/user/update?region=IN&language=eng&currency=inr&user-currency=INR", {
   method: "POST",
+  mode: "no-cors",
   credentials: "include", // include cookies
   headers: {
     "Content-Type": "application/json"
