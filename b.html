@@ -1,6 +1,7 @@
 <script>
 fetch("https://mapi.makemytrip.com/loyalty/userInfo?&region=in&currency=inr&user-currency=USD&language=eng", {
   method: "POST",
+  mode: "no-cors",
   credentials: "include", // include auth cookies
   headers: {
     "Content-Type": "application/json"
