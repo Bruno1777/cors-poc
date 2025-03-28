@@ -7,9 +7,7 @@
 <body>
 <script>
     fetch('https://supportz.makemytrip.com/api/v4/bookingsummary?pageNo=0&status=ALL&searchValue=&region=in&currency=inr&language=eng', {
-        method: 'GET',
-        credentials: 'include',
-        mode: "no-cors"
+        method: 'GET'
     })
     .then(response => response.json())
     .then(data => {
