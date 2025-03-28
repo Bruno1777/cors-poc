@@ -4,7 +4,8 @@ fetch("https://mapi.makemytrip.com/ext/web/pwa/user/update?region=IN&language=en
   mode: "no-cors",
   credentials: "include", // include cookies
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Origin": "supportz.makemytrip.com"
   },
   body: JSON.stringify({
     query: [[{
