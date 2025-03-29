@@ -8,8 +8,7 @@
 <script>
 // Preflight-free attempt (GET request, no headers)
 fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
-  method: 'GET',
-  credentials: 'include' // will still work if no preflight is triggered
+  method: 'GET' // will still work if no preflight is triggered
 })
 .then(r => r.text())
 .then(body => {
