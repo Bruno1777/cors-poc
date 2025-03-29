@@ -1,6 +1,7 @@
 <script>
 fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
-  method: 'GET'
+  method: 'GET',
+  credentials: 'include'
 })
 .then(r => r.text())
 .then(html => {
